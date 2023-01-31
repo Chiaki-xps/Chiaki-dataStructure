@@ -1,11 +1,10 @@
-// 该方法使用dummyHead
-// dummyHead为虚拟头节点，为了让头节点和其他节点共用相同的方法
-// dummyHead初始化的时候数据因为null
-
-// 用户不需要在意类里面的具体实现，链表中没有索引的概念，传入index只是表示数据在第几位，从0开始。
-// 在我们的链表类中，dummyHead占据index为0形成的链表，实际头节点index为1。所以当我们添加头节点的时候，实际通过dummyHead.next添加新节点，节点位置为1。
-// 以此类推，在某个节点添加新元素，即在该index的节点.next指向新节点。
-// 最终返回链表的时候并不会带上dummyHead，所以用户得到的头节点index为1。所以节点的位置会减1。而在链表类中所有节点的位置会加1。注意这个映射关系，我们在链中查找或者添加，都是传入的index后面加1，而这个1来自dummyHead。
+// 该链表使用dummyHead方式实现：
+// 1. dummyHead为虚拟头节点，目的是为了让头节点和其他节点共用相同的方法
+// 2. dummyHead初始化的时候数据应为null
+// 3. dummyHead在链表的实现中会占据index为0的位置，所以使用者获取到链表头在链表中实际index为1；用户不需要在意类里面的具体实现，只需要保证获取实际get(index=0)为头节点就行。
+// 4. 链表中没有索引的概念，无法直接通过索引取值，因此需要通过遍历查找，由于dummyHead的存在，查找到的index节点的next才是用户实际想要的。即用户存入的数据在链表类实现中位置处于+1，
+//    因此我们添加index节点的时候，在链表实现中找到该index节点.next指向新节点就行了。
+// 5. 返回的链表不会携带dummyHead，所以用户得到的链表头节点index为0
 
 // 节点
 class Node {
@@ -15,7 +14,7 @@ class Node {
     }
 }
 
-// // 链表
+// 链表
 class LinkedList {
     constructor() {
         this.dummyHead = new Node();
@@ -34,8 +33,8 @@ class LinkedList {
         let prev = this.dummyHead;
 
         // 添加节点的本质是，上一个节点的next指向新节点，然后更新新节点的next
-        // index表示的是第几个，而变成中第一个的位置为0，所以需要减1，然后犹豫dummyHead的存在加1，i<index
-        // index是我们要添加节点的位置，因为链表没办法直接通过索引获取值，所以通过for循环，不断替换prev，最终找到index对应的值
+        // index是用户要添加节点的位置，犹豫dummyHead的存在，链表中index可以查找到我们要添加节点位置的上一个节点，通过上一个节点.next指向新节点实现插入。
+        // 因为链表没办法直接通过索引获取值，所以通过for循环，不断替换prev，最终找到index对应的值
         for (let i = 0; i < index; i++) {
             prev = prev.next;
         };
@@ -174,5 +173,13 @@ console.log(myLink.get(0));
 // console.log(myLink.get(3));
 // console.log(myLink.getFirst());
 // console.log(myLink.getLast());
+myLink.set(4, 'a1')
+myLink.toString()
+console.log(myLink.contains('a1'));
+myLink.remove(5)
+myLink.removeElement('d')
+myLink.toString()
+
+
 
 
