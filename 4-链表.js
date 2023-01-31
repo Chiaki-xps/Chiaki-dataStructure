@@ -160,26 +160,42 @@ class LinkedList {
 
 }
 
-let myLink = new LinkedList();
-myLink.addFirst('a')
-myLink.addFirst('b')
-myLink.addFirst('c')
-myLink.addFirst('d')
-myLink.addFirst('e')
-// myLink.toString()
-myLink.addLast('f')
-myLink.toString()
-console.log(myLink.get(0));
-// console.log(myLink.get(3));
-// console.log(myLink.getFirst());
-// console.log(myLink.getLast());
-myLink.set(4, 'a1')
-myLink.toString()
-console.log(myLink.contains('a1'));
-myLink.remove(5)
-myLink.removeElement('d')
-myLink.toString()
+// 链表实现栈
+class Stack {
+    constructor() {
+        this.arrStack = new LinkedList();
+        this.size = this.arrStack.size;
+    }
 
+    push(e) {
+        this.arrStack.addFirst(e);
+        this.size ++;
+    }
 
+    pop() {
+        if (this.size === 0) {
+            throw new Error("Nothing in Stack");
+        } else {
+            this.arrStack.removeFirst();
+        }
+        
+    }
 
+    // 返回栈顶元素,不影响栈中元素
+    peek() {
+		return this.arrStack.getFirst();
+	}
+
+    isEmpty() {
+		return this.size === 0;
+	}
+
+    toString() {
+        this.arrStack.toString()
+    }
+
+}
+
+// 关于使用链表实现栈还是用数组实现栈哪个性能更好，并不好比较
+// 
 
