@@ -5,6 +5,7 @@
 // 4. 链表中没有索引的概念，无法直接通过索引取值，因此需要通过遍历查找，由于dummyHead的存在，查找到的index节点的next才是用户实际想要的。即用户存入的数据在链表类实现中位置处于+1，
 //    因此我们添加index节点的时候，在链表实现中找到该index节点.next指向新节点就行了。
 // 5. 返回的链表不会携带dummyHead，所以用户得到的链表头节点index为0
+// 6. 设计的时候暂时不把添加null值的情况。
 
 // 节点
 class Node {
@@ -201,3 +202,70 @@ class Stack {
 // 实际性能也会收到操作系统，软件的干扰。
 // 链表栈来说new的过程在一些环境下比较耗时，需要内存中寻找开辟新的空间。
 // 但是两者的时间复杂度是差不多的
+
+
+// 链表实现队列
+// 链表操作头节点 O(1)
+// 链表操作尾节点 O(n)
+// 改进我们的链表：head标记我们的头节点，tail标记链表的尾部，方便我们进行添加元素
+// 链表缺陷是不能够根据已知的节点找到它的上一个节点进行删除，只能通过遍历查找上一个节点，因此增加tail并不优化删除操作。
+// 队列特点先进先出。因此tail负责插入元素，head删除元素。因为操作都在头尾一端，不对中间进行操作，所以不会出现方法逻辑不统一的问题，所以不牵扯使用虚拟头节点。
+// 此时链表为空，head和tail指向为空。
+
+class Queue {
+    constructor() {
+        this.front = null;
+        this.tail = null;
+        this.length = 0
+    }
+
+    // 入队
+    enqueue(e) {
+
+        const node = new Node(e);
+
+        // 注意初始为空的时候
+        if (this.length === 0) {
+            this.front = this.tail = node;
+        } else {
+            // tail是个指针，指向当前的尾结点，尾结点next新增node
+            this.tail.next = node;
+            // 更新tail指向新的尾结点，并不改变原来链表结构
+            this.tail = node;
+        }
+        this.length++;
+    }
+
+    // 出队
+    dequeue() {
+        // 为空异常
+        if (this.length === 0) {
+            return;
+        };
+
+        let delNode = this.front;
+        this.front = this.front.next;
+        this.length--;
+        
+        if (this.length === 0) {
+            this.tail = null;
+        };
+
+    }
+
+    toString() {
+        let res = '';
+        let cur = this.front;
+        while(cur) {
+            res += `${cur.e} ->`;
+            cur = cur.next; 
+        }
+        res += 'null';
+
+
+        console.log(res);
+        
+    }
+
+
+}
