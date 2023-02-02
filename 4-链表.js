@@ -245,10 +245,11 @@ class Queue {
 
         let delNode = this.front;
         this.front = this.front.next;
+        delNode.next = null;
         this.length--;
         
         if (this.length === 0) {
-            this.tail = null;
+            his.front = this.tail = null;
         };
 
     }
@@ -267,5 +268,7 @@ class Queue {
         
     }
 
-
 }
+
+// 数组队列的时间复杂度是O(n)级别。
+// 循环队列和链表队列的时间复杂度是一样的。
