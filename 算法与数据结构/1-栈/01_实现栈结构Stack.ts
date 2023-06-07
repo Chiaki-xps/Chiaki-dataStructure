@@ -1,4 +1,4 @@
-import IStack from "./IStack";
+import IStack from './IStack';
 
 class ArrayStack<T = any> implements IStack<T> {
   // 定义一个数组/链表，用于存储元素
@@ -13,19 +13,18 @@ class ArrayStack<T = any> implements IStack<T> {
   }
 
   peek(): T | undefined {
-    return this.data[this.data.length -1]
+    return this.data[this.data.length - 1];
   }
 
   isEmpty(): boolean {
-    return this.data.length === 0
+    return this.data.length === 0;
   }
 
   size(): number {
-    return this.data.length
+    return this.data.length;
   }
-
 }
 
 const stack = new ArrayStack<number>();
 
-export {}
+export default ArrayStack;
