@@ -51,6 +51,39 @@ class LinkedList<T> {
     }
     console.log(values.join('->'));
   }
+
+  // 插入方法
+  insert(value: T, position: number) {
+    // 1. 越界判断
+    if (position < 0 || position > this.size) return false;
+
+    // 2. 根据value创建新的节点
+    const newNode = new Node(value);
+
+    // 3. 判断是否需要插入头部
+    if (position === 0) {
+      newNode.next = this.head;
+      this.head = newNode;
+    } else {
+
+      // 双指针方法
+      let current = this.head;
+      let pervious: Node<T> | null = null;
+      let index = 0;
+
+      while (index++ < position && current) {
+        // && current是为了让ts知道current值必存在
+        pervious = current;
+        current = current.next;
+      }
+
+      // index === position
+      newNode.next = current;
+      pervious!.next = newNode; // ?. 相反是 !. 表示必然存在
+    }
+    this.size++;
+    return true;
+  }
 }
 
 const linkedList = new LinkedList<string>();
@@ -59,6 +92,11 @@ linkedList.append('bbbb');
 linkedList.append('cccc');
 linkedList.append('dddd');
 
+linkedList.insert('abc', 0);
+linkedList.traverse();
+linkedList.insert('cba', 2);
+linkedList.traverse();
+linkedList.insert('nba', 6);
 linkedList.traverse();
 
 // 当前文件定义在一个模块里,否则在全局node环境下，Node是一个关键字
