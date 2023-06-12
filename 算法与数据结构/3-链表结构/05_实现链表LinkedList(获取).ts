@@ -114,6 +114,22 @@ class LinkedList<T> {
     // 返回删除的值
     return current?.value ?? null;
   }
+
+  // 获取方法:
+  get(position: number): T | null {
+    // 越界问题
+    if (position < 0 || position >= this.size) return null;
+
+    // 2. 查找元素,并且范围元素
+    let index = 0;
+    let current = this.head;
+    while (index++ < position && current) {
+      current = current.next;
+    }
+
+    // index === position
+    return current?.value ?? null;
+  }
 }
 
 const linkedList = new LinkedList<string>();
@@ -137,6 +153,11 @@ console.log(linkedList.removeAt(2));
 linkedList.traverse();
 console.log(linkedList.removeAt(3));
 linkedList.traverse();
+
+console.log('------ 测试get ------');
+console.log(linkedList.get(0));
+console.log(linkedList.get(1));
+console.log(linkedList.get(2));
 
 // 当前文件定义在一个模块里,否则在全局node环境下，Node是一个关键字
 export {};

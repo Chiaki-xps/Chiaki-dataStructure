@@ -19,6 +19,17 @@ class LinkedList<T> {
     return this.size;
   }
 
+  // 封装私有方法
+  // 根据position获取到当前的节点
+  private getNode(position: number): Node<T> | null {
+    let index = 0;
+    let current = this.head;
+    while (index++ < position && current) {
+      current = current.next;
+    }
+    return current;
+  }
+
   // 追加节点
   append(value: T) {
     // 1. 根据value创建一个新节点
@@ -65,20 +76,9 @@ class LinkedList<T> {
       newNode.next = this.head;
       this.head = newNode;
     } else {
-      // 双指针方法
-      let current = this.head;
-      let pervious: Node<T> | null = null;
-      let index = 0;
-
-      while (index++ < position && current) {
-        // && current是为了让ts知道current值必存在
-        pervious = current;
-        current = current.next;
-      }
-
-      // index === position
-      newNode.next = current;
-      pervious!.next = newNode; // ?. 相反是 !. 表示必然存在
+      const pervious = this.getNode(position - 1);
+      newNode.next = pervious!.next;
+      pervious!.next = newNode;
     }
     this.size++;
     return true;
@@ -95,18 +95,11 @@ class LinkedList<T> {
     if (position === 0) {
       // 运行到这里意味着必然存在一个节点
       // this.head = this.head!.next
-      this.head = this.head?.next ?? null;
+      this.head = current?.next ?? null;
     } else {
-      let pervious: Node<T> | null = null;
-      let index = 0;
-      while (index++ < position && current) {
-        pervious = current;
-        current = current.next;
-      }
-
-      // 找到需要的节点
-      // current不一定有值，可能就是最后一个节点了
-      pervious!.next = current?.next ?? null;
+      // position - 1为删除的节点的上一个节点
+      const pervious = this.getNode(position - 1);
+      pervious!.next = pervious?.next?.next ?? null;
     }
 
     this.size--;
@@ -114,21 +107,55 @@ class LinkedList<T> {
     // 返回删除的值
     return current?.value ?? null;
   }
+
+  // 获取方法:
+  get(position: number): T | null {
+    // 越界问题
+    if (position < 0 || position >= this.size) return null;
+
+    // 2. 查找元素,并且范围元素
+    // 加入取不到该属性的时候,返回undefined
+    return this.getNode(position)?.value ?? null;
+  }
+
+  // 更新方法:
+  update(value: T, position: number): boolean {
+    if (position < 0 || position >= this.size) return false;
+    const currentNode = this.getNode(position);
+    currentNode!.value = value;
+    return true;
+  }
+
+  // 根据值,获取对应位置的索引
+  indexOf(value: T): number {
+    let current = this.head;
+    let index = 0;
+    while (current) {
+      if (current.value === value) {
+        return index;
+      }
+      index++;
+      current = current.next;
+    }
+    return -1;
+  }
 }
 
 const linkedList = new LinkedList<string>();
-linkedList.append('aaaa');
-linkedList.append('bbbb');
-linkedList.append('cccc');
-linkedList.append('dddd');
+console.log('------ 测试append ------');
+linkedList.append('aaa');
+linkedList.append('bbb');
+linkedList.append('ccc');
+linkedList.append('ddd');
 
+console.log('------ 测试insert ------');
 linkedList.insert('abc', 0);
 linkedList.traverse();
 linkedList.insert('cba', 2);
-linkedList.traverse();
 linkedList.insert('nba', 6);
 linkedList.traverse();
 
+console.log('------ 测试removeAt ------');
 linkedList.removeAt(0);
 linkedList.removeAt(0);
 linkedList.traverse();
@@ -137,6 +164,21 @@ console.log(linkedList.removeAt(2));
 linkedList.traverse();
 console.log(linkedList.removeAt(3));
 linkedList.traverse();
+
+console.log('------ 测试get ------');
+console.log(linkedList.get(0));
+console.log(linkedList.get(1));
+console.log(linkedList.get(2));
+
+console.log('------ 测试update ------');
+linkedList.update('why', 1);
+linkedList.update('kobe', 2);
+
+console.log('------ 测试indexof ------');
+console.log(linkedList.indexOf('cba'));
+console.log(linkedList.indexOf('why'));
+console.log(linkedList.indexOf('kobe'));
+console.log(linkedList.indexOf('james'));
 
 // 当前文件定义在一个模块里,否则在全局node环境下，Node是一个关键字
 export {};
