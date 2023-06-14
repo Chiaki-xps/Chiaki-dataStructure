@@ -1,4 +1,3 @@
-// IList不需要引入,因为项目中ts文件运行在一个作用域中
 import IList from '../types/IList';
 
 interface IQueue<T> extends IList<T> {
