@@ -1,3 +1,4 @@
+import ILinkedList from "./ILinkedList";
 // 1. 创建Node节点类
 class Node<T> {
   value: T;
@@ -11,7 +12,7 @@ class Node<T> {
 }
 
 // 2. 创建LinkedList类
-class LinkedList<T> {
+class LinkedList<T> implements ILinkedList<T> {
   head: Node<T> | null = null; // 头结点
   private size: number = 0; // private表示私有的，外部不能直接访问
 

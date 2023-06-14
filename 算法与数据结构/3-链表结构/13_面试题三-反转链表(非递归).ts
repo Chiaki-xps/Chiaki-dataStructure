@@ -1,13 +1,8 @@
-// 思路:
-// 1. 需要定义一个指针current保存需要反转的节点的下一个节点
-//
-// 2. 改变head当前指向的节点,指向newHead
-
 import ListNode from './面试题_ListNode';
 
 function reverseList(head: ListNode | null): ListNode | null {
   console.log(head);
-  
+
   // 判断节点为null,或者只要一个节点，要么直接返回即可
   if (head === null || head.next === null) return head;
 
@@ -42,4 +37,5 @@ while (current) {
   current = current.next;
 }
 
+// 注意ts-node环境下，里面的tsconfig.json是不允许有隐式的any
 export {};
