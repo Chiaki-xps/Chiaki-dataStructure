@@ -1,3 +1,18 @@
+// 这个文件重新设计接口
+import IList from '../types/IList';
+
+interface ILinkedList<T> extends IList<T> {
+  append(value: T): void;
+  traverse(): void;
+  insert(value: T, position: number): boolean;
+  removeAt(position: number): T | null;
+  get(position: number): T | null;
+  update(value: T, position: number): boolean;
+  indexOf(value: T): number;
+  remove(value: T): T | null;
+  isEmpty(): boolean;
+}
+
 // 1. 创建Node节点类
 class Node<T> {
   value: T;
@@ -11,12 +26,16 @@ class Node<T> {
 }
 
 // 2. 创建LinkedList类
-class LinkedList<T> {
+class LinkedList<T> implements ILinkedList<T> {
   head: Node<T> | null = null; // 头结点
-  private size: number = 0; // private表示私有的，外部不能直接访问
+  private length: number = 0; // private表示私有的，外部不能直接访问
 
-  get length() {
-    return this.size;
+  size() {
+    return this.length;
+  }
+
+  peek(): T | undefined {
+    return this.head?.value;
   }
 
   // 封装私有方法
@@ -48,8 +67,8 @@ class LinkedList<T> {
       current.next = newNode;
     }
 
-    // 3. size++
-    this.size++;
+    // 3. length++
+    this.length++;
   }
 
   // 遍历链表的方法
@@ -66,7 +85,7 @@ class LinkedList<T> {
   // 插入方法
   insert(value: T, position: number) {
     // 1. 越界判断
-    if (position < 0 || position > this.size) return false;
+    if (position < 0 || position > this.length) return false;
 
     // 2. 根据value创建新的节点
     const newNode = new Node(value);
@@ -80,7 +99,7 @@ class LinkedList<T> {
       newNode.next = pervious!.next;
       pervious!.next = newNode;
     }
-    this.size++;
+    this.length++;
     return true;
   }
 
@@ -88,7 +107,7 @@ class LinkedList<T> {
   removeAt(position: number): T | null {
     // 1. 越界的判断
     // 不能等于长度是因为position从0开始
-    if (position < 0 || position >= this.size) return null;
+    if (position < 0 || position >= this.length) return null;
 
     // 2. 是否是删除第一个节点
     let current = this.head;
@@ -102,7 +121,7 @@ class LinkedList<T> {
       pervious!.next = pervious?.next?.next ?? null;
     }
 
-    this.size--;
+    this.length--;
 
     // 返回删除的值
     return current?.value ?? null;
@@ -111,7 +130,7 @@ class LinkedList<T> {
   // 获取方法:
   get(position: number): T | null {
     // 越界问题
-    if (position < 0 || position >= this.size) return null;
+    if (position < 0 || position >= this.length) return null;
 
     // 2. 查找元素,并且范围元素
     // 加入取不到该属性的时候,返回undefined
@@ -120,7 +139,7 @@ class LinkedList<T> {
 
   // 更新方法:
   update(value: T, position: number): boolean {
-    if (position < 0 || position >= this.size) return false;
+    if (position < 0 || position >= this.length) return false;
     const currentNode = this.getNode(position);
     currentNode!.value = value;
     return true;
@@ -148,7 +167,7 @@ class LinkedList<T> {
 
   // 判断列表是否为空的方法
   isEmpty() {
-    return this.size === 0;
+    return this.length === 0;
   }
 }
 

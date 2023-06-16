@@ -1,3 +1,4 @@
+// 基本的链表结构
 interface ILinkedList<T> {
   append(value: T): void;
   traverse(): void;
@@ -7,7 +8,7 @@ interface ILinkedList<T> {
   update(value: T, position: number): boolean;
   indexOf(value: T): number;
   remove(value: T): T | null;
-  isEmpty(): Boolean;
+  isEmpty(): boolean;
   get length(): number;
 }
 
