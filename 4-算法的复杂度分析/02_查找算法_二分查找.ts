@@ -23,7 +23,7 @@ function binarySearch(array: number[], num: number) {
     } else if (midNum < num) {
       left = mid + 1;
     } else {
-      right = mid + 1;
+      right = mid - 1;
     }
   }
 
@@ -31,6 +31,6 @@ function binarySearch(array: number[], num: number) {
 }
 
 const index = binarySearch([1, 3, 5, 10, 100, 222, 333], 222);
-console.log(index);
+console.log('binarySearch-index', index);
 
 export default binarySearch;

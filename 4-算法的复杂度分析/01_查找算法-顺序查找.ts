@@ -1,5 +1,6 @@
 function sequentSearch(array: number[], num: number) {
-  for (let i = 0; i < array.length; i++) {
+  const length = array.length;
+  for (let i = 0; i < length; i++) {
     const item = array[i];
     if (item === num) {
       return i;
