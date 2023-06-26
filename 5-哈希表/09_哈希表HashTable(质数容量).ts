@@ -18,9 +18,29 @@ class HashTable<T = any> {
     return index;
   }
 
+  isPrime(num: number): boolean {
+    const sqrt = Math.sqrt(num);
+    for (let i = 2; i <= sqrt; i++) {
+      if (num % i === 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private getNextPrime(num: number) {
+    let newPrime = num;
+    while (!this.isPrime(newPrime)) {
+      newPrime++;
+    }
+    return newPrime;
+  }
+
   private resize(newLength: number) {
     // 设置新的长度
-    this.length = newLength;
+    const newPrime = this.getNextPrime(newLength);
+    console.log('获取到容量的质数:', newPrime);
+    this.length = newPrime;
 
     // 获取到原来所有的数据,并且重新放入到新的容量数组中
     // 1. 对数据进行初始化操作
@@ -160,7 +180,7 @@ hashTable.delete('mba');
 hashTable.delete('cba');
 hashTable.delete('abc');
 hashTable.delete('aaa');
-console.log(hashTable.storage);
+// console.log(hashTable.storage);
 
 // 关于打印结果不固定的问题：
 // 一开始我们的storage是空数组，长度为0，只有我们的出现index为设置的哈希表设置的最大长度，例如一开始设置的是7，这时候数组的长度才有7.
