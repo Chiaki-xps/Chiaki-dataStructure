@@ -31,3 +31,5 @@ console.log(hashFunc('mba', 7));
 // 需要注意的是,存放的字符串key不应该重复.重复没有啥意思。
 console.log(hashFunc('aaa', 7));
 console.log(hashFunc('bbb', 7));
+
+export default hashFunc;
