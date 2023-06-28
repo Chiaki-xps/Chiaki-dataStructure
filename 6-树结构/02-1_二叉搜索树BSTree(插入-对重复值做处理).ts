@@ -1,0 +1,107 @@
+import { btPrint } from 'hy-algokit';
+
+import Node from '../types/Nodes';
+
+class TreeNode<T> extends Node<T> {
+  left: TreeNode<T> | null = null;
+  right: TreeNode<T> | null = null;
+}
+
+// BinarySearchTree
+class BSTree<T> {
+  private root: TreeNode<T> | null = null;
+
+  print() {
+    btPrint(this.root);
+  }
+
+  /** 插入数据的操作 */
+  insert(value: T) {
+    // 1. 根据传入value创建Node(TreeNode)节点
+    const newNode = new TreeNode(value);
+
+    // 2. 判断当前是否已经有了根节点
+    if (!this.root) {
+      // 当前树为空
+      this.root = newNode;
+    } else {
+      // 树中已经有其他值
+      this.insertNode(this.root, newNode);
+    }
+  }
+
+  private insertNode(node: TreeNode<T>, newNode: TreeNode<T>) {
+    if (newNode.value < node.value) {
+      // 去左边继续查找的空白位置
+      if (node.left === null) {
+        // node 节点的左边已经是空白
+        node.left = newNode;
+      } else {
+        // 去右边继续查找空白位置
+        this.insertNode(node.left, newNode);
+      }
+    }
+    // 这里条件最好写上，更加严谨，可以避免传入相同的值插入二叉搜索树中
+    else if (newNode.value > node.value) {
+      if (node.right === null) {
+        node.right = newNode;
+      } else {
+        this.insertNode(node.right, newNode);
+      }
+    }
+    // 走到这里就意味着传入的值已经重复了
+    else {
+      console.log('重复的值');
+    }
+  }
+}
+
+const bst = new BSTree<number>();
+
+// 二叉搜索树里存放的值不会重复
+bst.insert(20);
+bst.insert(30);
+bst.insert(18);
+bst.insert(15);
+bst.insert(19);
+bst.insert(36);
+bst.insert(32);
+bst.insert(32);
+
+bst.print();
+// 不难发现32的位置有一点点瑕疵，这是因为我们并没有对它进行去重
+//             20
+//      ┌───────┴───────┐
+//     18              30
+//  ┌───┴───┐           └───┐
+// 15      19              36
+//                        ┌─┘
+//                       32
+
+// bst.insert(11);
+// bst.insert(7);
+// bst.insert(15);
+// bst.insert(5);
+// bst.insert(3);
+// bst.insert(9);
+// bst.insert(8);
+// bst.insert(10);
+// bst.insert(13);
+// bst.insert(12);
+// bst.insert(14);
+// bst.insert(20);
+// bst.insert(18);
+// bst.insert(25);
+// bst.insert(6);
+
+// bst.print();
+
+//              11
+//       ┌───────┴───────┐
+//       7              15
+//   ┌───┴───┐       ┌───┴───┐
+//   5       9      13      20
+// ┌─┴─┐   ┌─┴─┐   ┌─┴─┐   ┌─┴─┐
+// 3   6   8  10  12  14  18  25
+
+export {};
