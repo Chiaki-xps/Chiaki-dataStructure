@@ -146,7 +146,6 @@ class BSTree<T> {
    *  搜索的节点比当前节点的值要大，从右边找
    *  搜索的节点比当前节点的值要下，从左边找
    */
-  // 写法一
   search(value: T): boolean {
     let current = this.root;
     while (current) {
@@ -157,6 +156,20 @@ class BSTree<T> {
         current = current.left;
       }
     }
+
+    return false;
+  }
+
+  /**
+   * 1. 搜索节点，不存在，结束
+   * 2. 删除的节点是一个叶子节点
+   *      拿到父节点，判断左节点还是右节点，然后parent.right = null / parent.left = null
+   * 3. 如果删除的节点有一个子字节
+   * 4. 如果删除的节点有两个子节点
+   */
+  remove(value: T): boolean {
+    // 1. 搜索：当前是否存在这个value，存在需要把该节点和父节点返回方便下一步操作
+    let current = this.root;
 
     return false;
   }
@@ -227,10 +240,13 @@ bst.insert(6);
 // console.log(bst.getMaxValue());
 // console.log(bst.getMinValue());
 
-console.log(bst.search(1));
-console.log(bst.search(20));
-console.log(bst.search(18));
-console.log(bst.search(6));
-console.log(bst.search(30));
+// console.log(bst.search(1));
+// console.log(bst.search(20));
+// console.log(bst.search(18));
+// console.log(bst.search(6));
+// console.log(bst.search(30));
+
+bst.remove(6);
+bst.remove(3);
 
 export {};
