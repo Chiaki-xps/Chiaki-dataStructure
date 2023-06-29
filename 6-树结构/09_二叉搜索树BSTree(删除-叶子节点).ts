@@ -5,6 +5,15 @@ import Node from '../types/Nodes';
 class TreeNode<T> extends Node<T> {
   left: TreeNode<T> | null = null;
   right: TreeNode<T> | null = null;
+  parent: TreeNode<T> | null = null;
+
+  get isLeft(): boolean {
+    return !!(this.parent && this.parent.left === this);
+  }
+
+  get isRight(): boolean {
+    return !!(this.parent && this.parent.right === this);
+  }
 }
 
 // BinarySearchTree
@@ -13,6 +22,31 @@ class BSTree<T> {
 
   print() {
     btPrint(this.root);
+  }
+
+  private searchNode(value: T): TreeNode<T> | null {
+    let current = this.root;
+    let parent: TreeNode<T> | null = null;
+
+    while (current) {
+      // 1. 找到current就返回
+      if (current.value === value) {
+        return current;
+      }
+
+      // 2. 继续向下找
+      parent = current;
+      if (current.value < value) {
+        current = current.right;
+      } else {
+        current = current.left;
+      }
+
+      // 如果current有值，那么current保存父节点
+      if (current) current.parent = parent;
+    }
+
+    return null;
   }
 
   /** 插入数据的操作 */
@@ -146,54 +180,47 @@ class BSTree<T> {
    *  搜索的节点比当前节点的值要大，从右边找
    *  搜索的节点比当前节点的值要下，从左边找
    */
-  // 写法一
   search(value: T): boolean {
-    let current = this.root;
-    while (current) {
-      if (current.value === value) return true;
-      if (current.value < value) {
-        current = current.right;
+    return !!this.searchNode(value);
+  }
+
+  /**
+   * 1. 搜索节点，不存在，结束
+   * 2. 删除的节点是一个叶子节点
+   *      拿到父节点，判断左节点(isLeft)还是右节点(isRight)，然后parent.right = null / parent.left = null
+   * 3. 如果删除的节点有一个子字节
+   * 4. 如果删除的节点有两个子节点
+   */
+  remove(value: T): boolean {
+    // 1. 搜索：当前是否存在这个value，存在需要把该节点和父节点返回方便下一步操作
+    const current = this.searchNode(value);
+    if (!current) return false;
+
+    // 2. 获取到三个东西：当前节点/父节点/ isLeft,isRight
+    // 2.1 如果删除的是叶子节点
+    if (current.left === null && current.right === null) {
+      // 如果整棵树只剩根节点, 那么 current.parent === null即 current === this.root，及时叶子节点又是根节点的话, root = null
+      if (current === this.root) {
+        this.root = null;
+      } else if (current.isLeft) {
+        current.parent!.left = null;
       } else {
-        current = current.left;
+        current.parent!.right = null;
       }
     }
 
-    return false;
+    // 3. 只有一个子节点：只有左子节点
+    else if (current.right === null) {
+      if (current === this.root) {
+        this.root = current.left;
+      } else if (current.isLeft) {
+        current.parent!.left = current.left;
+      } else {
+        current.parent!.right = current.left;
+      }
+    }
+    return true;
   }
-
-  // 写法二
-  // searchNoRecursion(value: T) {
-  //   let current = this.root;
-  //   while (current) {
-  //     if (current.value > value) {
-  //       current = current.left;
-  //     } else if (current.value < value) {
-  //       current = current.right;
-  //     } else {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // 写法三
-  // searchRecursion(value: T): boolean {
-  //   return this.searchNode(this.root, value);
-  // }
-
-  // private searchNode(node: TreeNode<T> | null, value: T): boolean {
-  //   // 1. 如果节点为null，那么退出递归
-  //   if (node === null) return false;
-
-  //   // 2. 判断node节点的value和传入的value的大小
-  //   if (node.value > value) {
-  //     return this.searchNode(node.left, value);
-  //   } else if (node.value < value) {
-  //     return this.searchNode(node.right, value);
-  //   } else {
-  //     return true;
-  //   }
-  // }
 }
 
 const bst = new BSTree<number>();
@@ -261,10 +288,15 @@ bst.insert(6);
 // console.log(bst.getMaxValue());
 // console.log(bst.getMinValue());
 
-console.log(bst.search(1));
-console.log(bst.search(20));
-console.log(bst.search(18));
-console.log(bst.search(6));
-console.log(bst.search(30));
+// console.log(bst.search(1));
+// console.log(bst.search(20));
+// console.log(bst.search(18));
+// console.log(bst.search(6));
+// console.log(bst.search(30));
+
+bst.remove(3);
+bst.remove(6);
+bst.remove(8);
+bst.print();
 
 export {};

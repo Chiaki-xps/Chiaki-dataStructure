@@ -146,7 +146,6 @@ class BSTree<T> {
    *  搜索的节点比当前节点的值要大，从右边找
    *  搜索的节点比当前节点的值要下，从左边找
    */
-  // 写法一
   search(value: T): boolean {
     let current = this.root;
     while (current) {
@@ -161,39 +160,33 @@ class BSTree<T> {
     return false;
   }
 
-  // 写法二
-  // searchNoRecursion(value: T) {
-  //   let current = this.root;
-  //   while (current) {
-  //     if (current.value > value) {
-  //       current = current.left;
-  //     } else if (current.value < value) {
-  //       current = current.right;
-  //     } else {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
+  /**
+   * 1. 搜索节点，不存在，结束
+   * 2. 删除的节点是一个叶子节点
+   *      拿到父节点，判断左节点还是右节点，然后parent.right = null / parent.left = null
+   * 3. 如果删除的节点有一个子字节
+   * 4. 如果删除的节点有两个子节点
+   */
+  remove(value: T): boolean {
+    // 1. 搜索：当前是否存在这个value，存在需要把该节点和父节点返回方便下一步操作
+    let current = this.root;
+    let parent: TreeNode<T> | null = null; // 父节点为null时，一定是根节点
 
-  // 写法三
-  // searchRecursion(value: T): boolean {
-  //   return this.searchNode(this.root, value);
-  // }
+    while (current) {
+      if (current.value === value) break;
 
-  // private searchNode(node: TreeNode<T> | null, value: T): boolean {
-  //   // 1. 如果节点为null，那么退出递归
-  //   if (node === null) return false;
+      parent = current;
 
-  //   // 2. 判断node节点的value和传入的value的大小
-  //   if (node.value > value) {
-  //     return this.searchNode(node.left, value);
-  //   } else if (node.value < value) {
-  //     return this.searchNode(node.right, value);
-  //   } else {
-  //     return true;
-  //   }
-  // }
+      if (current.value < value) {
+        current = current.right;
+      } else {
+        current = current.left;
+      }
+    }
+    console.log(current?.value);
+    console.log(parent?.value);
+    return true;
+  }
 }
 
 const bst = new BSTree<number>();
@@ -261,10 +254,13 @@ bst.insert(6);
 // console.log(bst.getMaxValue());
 // console.log(bst.getMinValue());
 
-console.log(bst.search(1));
-console.log(bst.search(20));
-console.log(bst.search(18));
-console.log(bst.search(6));
-console.log(bst.search(30));
+// console.log(bst.search(1));
+// console.log(bst.search(20));
+// console.log(bst.search(18));
+// console.log(bst.search(6));
+// console.log(bst.search(30));
+
+bst.remove(15);
+bst.remove(3);
 
 export {};
