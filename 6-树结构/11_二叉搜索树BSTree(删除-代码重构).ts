@@ -191,22 +191,80 @@ class BSTree<T> {
    * 3. 如果删除的节点有一个子字节
    * 4. 如果删除的节点有两个子节点
    */
+
+  /**
+   * getSuccessor返回处理好的后继节点
+   */
+  private getSuccessor(delNode: TreeNode<T>) {
+    // 获取右子树，找最小的值，即一直找左节点
+    let current = delNode.right;
+    // successor保存后继节点
+    let successor: TreeNode<T> | null = null;
+
+    while (current) {
+      successor = current;
+      current = current.left;
+      if (current) {
+        // 当前节点的父节点也保存起来。这样子我们的后继节点也能够找到父节点。因为后继节点移动后，父节点要删除后继节点。
+        current.parent = successor;
+      }
+    }
+
+    // successor不是删除节点的右节点，说明该节点已经是右子树的最小节点，该节点不会有左节点，因为它已经还是最小的，
+    // 但是可能会有右结点，就需要将它的右节点移动到successor节点的位置，即successor的父节点的左节点
+    if (successor !== delNode.right) {
+      // 有后继节点的右节点就移到后继节点的父节点左节点上，没有就为null
+      successor!.parent!.left = successor?.right ?? null;
+      successor!.right = delNode.right;
+    }
+
+    // successor === delNode.right的时候我们不需要做什么。即使我们有右结点，因为删除的节点是后继节点的父节点，后继节点变成父节点。
+
+    // 一定要进行的操作：将删除节点的left，赋值给后继节点的left
+    // 将删除节点的左节点，放到后继节点的左边
+    successor!.left = delNode.left;
+    return successor!;
+  }
+
   remove(value: T): boolean {
     // 1. 搜索：当前是否存在这个value，存在需要把该节点和父节点返回方便下一步操作
     const current = this.searchNode(value);
     if (!current) return false;
 
     // 2. 获取到三个东西：当前节点/父节点/ isLeft,isRight
+    let replaceNode: TreeNode<T> | null = null;
+
     // 2.1 如果删除的是叶子节点
     if (current.left === null && current.right === null) {
-      // 如果整棵树只剩根节点, 那么 current.parent === null即 current === this.root，及时叶子节点又是根节点的话, root = null
-      if (current === this.root) {
-        this.root = null;
-      } else if (current.isLeft) {
-        current.parent!.left = null;
-      } else {
-        current.parent!.right = null;
-      }
+      replaceNode = null;
+    }
+
+    // 3. 只有一个子节点：只有左子节点
+    else if (current.right === null) {
+      replaceNode = current.left;
+    }
+
+    // 4. 只有一个子节点：只有右 子节点
+    else if (current.left === null) {
+      replaceNode = current.right;
+    }
+
+    // 5. 有两个子节点
+    // 方式一：左子树上移：找到左子树中最大的节点。（该节点称之为前驱节点）
+    // 方式二：右子树上移：找到右子树中最小的节点。（该节点称之为后继节点）
+    // 如果你用中序遍历就会发现，其实就是他靠边的两个节点。（这是我自己推测的）
+    else {
+      // 拿到后继节点
+      const successor = this.getSuccessor(current);
+      replaceNode = successor;
+    }
+
+    if (current === this.root) {
+      this.root = replaceNode;
+    } else if (current.isLeft) {
+      current.parent!.left = replaceNode;
+    } else {
+      current.parent!.right = replaceNode;
     }
 
     return true;
@@ -284,9 +342,27 @@ bst.insert(6);
 // console.log(bst.search(6));
 // console.log(bst.search(30));
 
-bst.remove(3);
-bst.remove(8);
-bst.remove(12);
+// 删除一个节点的情况
+// bst.remove(3);
+// bst.remove(8);
+// bst.remove(12);
+// bst.print();
+
+// bst.remove(6);
+// bst.remove(10);
+// bst.remove(25);
+// bst.print();
+
+// bst.remove(20);
+// bst.print();
+
+// bst.remove(13);
+// bst.print();
+
+// 删除两个子节点的情况
+bst.remove(11);
+bst.remove(15);
+bst.remove(9);
 bst.print();
 
 export {};

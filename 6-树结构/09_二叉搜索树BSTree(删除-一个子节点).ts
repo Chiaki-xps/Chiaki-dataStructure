@@ -209,6 +209,37 @@ class BSTree<T> {
       }
     }
 
+    // 3. 只有一个子节点：只有左子节点
+    else if (current.right === null) {
+      if (current === this.root) {
+        this.root = current.left;
+      } else if (current.isLeft) {
+        current.parent!.left = current.left;
+      } else {
+        current.parent!.right = current.left;
+      }
+    }
+
+    // 4. 只有一个子节点：只有右 子节点
+    else if (current.left === null) {
+      if (current === this.root) {
+        this.root = current.right;
+      } else if (current.isLeft) {
+        current.parent!.left = current.right;
+      } else {
+        current.parent!.right = current.right;
+      }
+    }
+    // else if (current.left === null) {
+    //   if (current === this.root) {
+    //     this.root = current.right;
+    //   } else if (current.isRight) {
+    //     current.parent!.right = current.right;
+    //   } else {
+    //     current.parent!.left = current.right;
+    //   }
+    // }
+
     return true;
   }
 }
@@ -287,6 +318,17 @@ bst.insert(6);
 bst.remove(3);
 bst.remove(8);
 bst.remove(12);
+bst.print();
+
+bst.remove(6);
+bst.remove(10);
+bst.remove(25);
+bst.print();
+
+bst.remove(20);
+bst.print();
+
+bst.remove(13);
 bst.print();
 
 export {};
