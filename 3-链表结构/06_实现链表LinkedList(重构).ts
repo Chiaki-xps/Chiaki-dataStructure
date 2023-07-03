@@ -99,6 +99,10 @@ class LinkedList<T> {
     } else {
       // position - 1为删除的节点的上一个节点
       const pervious = this.getNode(position - 1);
+
+      // 需要给current重新赋值
+      current = pervious!.next;
+
       pervious!.next = pervious?.next?.next ?? null;
     }
 

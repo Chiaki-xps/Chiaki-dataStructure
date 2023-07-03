@@ -118,6 +118,10 @@ class LinkedList<T> implements ILinkedList<T> {
     } else {
       // position - 1为删除的节点的上一个节点
       const pervious = this.getNode(position - 1);
+
+      // 需要给current重新赋值
+      current = pervious!.next;
+
       pervious!.next = pervious?.next?.next ?? null;
     }
 
@@ -216,7 +220,6 @@ linkedList.remove('cba');
 linkedList.remove('kobe');
 linkedList.traverse();
 console.log(linkedList.isEmpty());
-
 
 // 当前文件定义在一个模块里,否则在全局node环境下，Node是一个关键字
 export {};
