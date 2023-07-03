@@ -30,7 +30,7 @@ export default class LinkedList<T> implements ILinkedList<T> {
   // protected是ts的语法，允许我们的子类访问父类的属性，但不能被实例访问
   // protected private称之为属性修饰符
   protected head: Node<T> | null = null; // 头结点
-  private length: number = 0; // private表示私有的，外部不能直接访问
+  protected length: number = 0; // private表示私有的，外部不能直接访问
 
   // 尾部属性: 总是指向我们的尾部
   protected tail: Node<T> | null = null;
@@ -82,8 +82,19 @@ export default class LinkedList<T> implements ILinkedList<T> {
     let current = this.head;
     while (current) {
       values.push(current.value);
-      current = current.next;
+      // 在循环链表中到了最后一个就打断循环
+      if (this.isTail(current)) {
+        current = null;
+      } else {
+        current = current.next;
+      }
     }
+
+    // 希望打印最后循环链表之后，最后再打印第一个
+    if (this.head && this.tail?.next === this.head) {
+      values.push(this.head.value);
+    }
+
     console.log(values.join('->'));
   }
 
@@ -190,52 +201,52 @@ export default class LinkedList<T> implements ILinkedList<T> {
 }
 
 const linkedList = new LinkedList<string>();
-console.log('------ 测试append ------');
-linkedList.append('aaa');
-linkedList.append('bbb');
-linkedList.append('ccc');
-linkedList.append('ddd');
-linkedList.traverse();
+// console.log('------ 测试append ------');
+// linkedList.append('aaa');
+// linkedList.append('bbb');
+// linkedList.append('ccc');
+// linkedList.append('ddd');
+// linkedList.traverse();
 
-console.log('------ 测试insert ------');
-linkedList.insert('abc', 0);
-linkedList.traverse();
-linkedList.insert('cba', 2);
-linkedList.insert('nba', 6);
-linkedList.traverse();
+// console.log('------ 测试insert ------');
+// linkedList.insert('abc', 0);
+// linkedList.traverse();
+// linkedList.insert('cba', 2);
+// linkedList.insert('nba', 6);
+// linkedList.traverse();
 
-// console.log('------ 测试removeAt ------');
-linkedList.removeAt(0);
-linkedList.removeAt(0);
-linkedList.traverse();
+// // console.log('------ 测试removeAt ------');
+// linkedList.removeAt(0);
+// linkedList.removeAt(0);
+// linkedList.traverse();
 
-console.log(linkedList.removeAt(2));
-linkedList.traverse();
-console.log(linkedList.removeAt(3));
-linkedList.traverse();
+// console.log(linkedList.removeAt(2));
+// linkedList.traverse();
+// console.log(linkedList.removeAt(3));
+// linkedList.traverse();
 
-// console.log('------ 测试get ------');
-console.log(linkedList.get(0));
-console.log(linkedList.get(1));
-console.log(linkedList.get(2));
+// // console.log('------ 测试get ------');
+// console.log(linkedList.get(0));
+// console.log(linkedList.get(1));
+// console.log(linkedList.get(2));
 
-// console.log('------ 测试update ------');
-linkedList.update('why', 1);
-linkedList.update('kobe', 2);
-linkedList.traverse();
+// // console.log('------ 测试update ------');
+// linkedList.update('why', 1);
+// linkedList.update('kobe', 2);
+// linkedList.traverse();
 
-// console.log('------ 测试indexof ------');
-console.log(linkedList.indexOf('cba'));
-console.log(linkedList.indexOf('why'));
-console.log(linkedList.indexOf('kobe'));
-console.log(linkedList.indexOf('james'));
+// // console.log('------ 测试indexof ------');
+// console.log(linkedList.indexOf('cba'));
+// console.log(linkedList.indexOf('why'));
+// console.log(linkedList.indexOf('kobe'));
+// console.log(linkedList.indexOf('james'));
 
-// console.log('------ 测试remove ------');
-linkedList.remove('why');
-linkedList.remove('cba');
-linkedList.remove('kobe');
-linkedList.traverse();
-console.log(linkedList.isEmpty());
+// // console.log('------ 测试remove ------');
+// linkedList.remove('why');
+// linkedList.remove('cba');
+// linkedList.remove('kobe');
+// linkedList.traverse();
+// console.log(linkedList.isEmpty());
 
 // 当前文件定义在一个模块里,否则在全局node环境下，Node是一个关键字
 export {};
