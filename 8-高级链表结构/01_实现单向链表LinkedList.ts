@@ -1,5 +1,6 @@
 // 这个文件重新设计接口
 import IList from '../types/IList';
+import { Node } from './ILinkedNode';
 
 interface ILinkedList<T> extends IList<T> {
   append(value: T): void;
@@ -11,18 +12,6 @@ interface ILinkedList<T> extends IList<T> {
   indexOf(value: T): number;
   remove(value: T): T | null;
   isEmpty(): boolean;
-}
-
-// 1. 创建Node节点类
-class Node<T> {
-  value: T;
-  next: Node<T> | null = null; //指针
-
-  // 实例的时候完成赋值操作
-  constructor(value: T) {
-    this.value = value;
-    this.next = null;
-  }
 }
 
 // 2. 创建LinkedList类
@@ -182,8 +171,14 @@ export default class LinkedList<T> implements ILinkedList<T> {
       if (current.value === value) {
         return index;
       }
+
+      if (this.isTail(current)) {
+        current = null;
+      } else {
+        current = current.next;
+      }
+
       index++;
-      current = current.next;
     }
     return -1;
   }

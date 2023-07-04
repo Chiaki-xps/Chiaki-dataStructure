@@ -11,6 +11,8 @@ class CircularLinkedList<T> extends LinkedList<T> {
 
   insert(value: T, position: number): boolean {
     const isSuccess = super.insert(value, position);
+    // super.insert调用后，length已经+1,
+    // 判断position操作的是否是原链表最后一个节点，可以再完成super.insert之后，判断position === length-1
     if (isSuccess && (position === this.length - 1 || position === 0)) {
       this.tail!.next = this.head;
     }
@@ -21,7 +23,8 @@ class CircularLinkedList<T> extends LinkedList<T> {
     const value = super.removeAt(position);
 
     // 上面调用super.removeAt的时候，如果有值意味着完成了length--的操作
-    // 所以这里比较的时候，不能用position === this.length -1
+    // 所以这里比较的时候，不能用position === this.length -1,和上面一样
+    // this.tail判断是是不是最后一个节点也被删掉了。即链表长度已经为0的时候
     if (value && this.tail && (position === 0 || position === this.length)) {
       this.tail!.next = this.head;
     }
@@ -50,3 +53,14 @@ cLinkedList.removeAt(2);
 cLinkedList.traverse();
 cLinkedList.removeAt(2);
 cLinkedList.traverse();
+
+// console.log('------ 测试update ------');
+cLinkedList.update('why', 1);
+cLinkedList.update('kobe', 2);
+cLinkedList.traverse();
+
+// console.log('------ 测试indexof ------');
+console.log(cLinkedList.indexOf('cba'));
+console.log(cLinkedList.indexOf('why'));
+console.log(cLinkedList.indexOf('kobe'));
+console.log(cLinkedList.indexOf('james'));
