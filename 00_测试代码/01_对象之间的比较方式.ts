@@ -47,3 +47,5 @@ console.log(p2 > p3); // true
 
 // 使用===要求相同的对象，p3和p4不是相同对象，所以还是false，不会调用valueOf
 console.log(p3 === p4); // false
+
+export {};
