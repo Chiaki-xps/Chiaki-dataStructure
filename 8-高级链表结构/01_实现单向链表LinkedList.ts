@@ -34,7 +34,7 @@ export default class LinkedList<T> implements ILinkedList<T> {
 
   // 封装私有方法
   // 根据position获取到当前的节点
-  private getNode(position: number): Node<T> | null {
+  protected getNode(position: number): Node<T> | null {
     let index = 0;
     let current = this.head;
     while (index++ < position && current) {

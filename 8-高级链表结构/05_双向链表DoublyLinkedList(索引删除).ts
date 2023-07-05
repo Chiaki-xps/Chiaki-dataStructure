@@ -1,3 +1,4 @@
+import { log } from 'console';
 import LinkedList from './01_实现单向链表LinkedList';
 import { DoublyNode } from './ILinkedNode';
 
@@ -34,6 +35,66 @@ class DoublyLinkedList<T> extends LinkedList<T> {
       this.head.prev = newNode;
       this.head = newNode;
     }
+
+    this.length++;
+  }
+
+  // 反向遍历
+  postTraverse() {
+    const value: T[] = [];
+    let current = this.tail;
+    while (current) {
+      value.push(current.value);
+      current = current.prev;
+    }
+
+    console.log(value.join('->'));
+  }
+
+  // 根据索引插入元素
+  insert(value: T, position: number): boolean {
+    if (position < 0 || position > this.length) return false;
+
+    if (position === 0) {
+      this.prepend(value);
+    } else if (position === this.length) {
+      this.append(value);
+    } else {
+      const newNode = new DoublyNode(value);
+      // 拿到当前位置的节点
+      const current = this.getNode(position) as DoublyNode<T>;
+      current.prev!.next = newNode;
+      newNode.next = current;
+      newNode.prev = current.prev;
+      // 个别需要注意顺序
+      current.prev = newNode;
+
+      this.length++;
+    }
+
+    return true;
+  }
+
+  // 索引删除
+  removeAt(position: number): T | null {
+    if (position < 0 || position > this.length) return null;
+
+    if (position === 0) {
+      if (this.length === 1) {
+        this.head = null;
+        this.tail = null;
+      } else {
+        this.head = this.head!.next;
+        this.head!.prev = null;
+      }
+    }
+    // position从0开始计数，所以最后一个节点应该是length -1
+    else if (position === this.length - 1) {
+      this.tail = this.tail!.prev;
+      this.tail!.next = null;
+    } else {
+    }
+    return null;
   }
 }
 
@@ -52,6 +113,13 @@ doublyLinkedList.prepend('abc');
 doublyLinkedList.prepend('cba');
 
 doublyLinkedList.traverse();
+doublyLinkedList.postTraverse();
+
+doublyLinkedList.insert('why', 0);
+doublyLinkedList.insert('kobe', 7);
+doublyLinkedList.insert('james', 3);
+doublyLinkedList.traverse();
+doublyLinkedList.postTraverse();
 
 /**
  * 多态：指为不同的数据类型的实体提供统一的接口
