@@ -77,8 +77,9 @@ class DoublyLinkedList<T> extends LinkedList<T> {
 
   // 索引删除
   removeAt(position: number): T | null {
-    if (position < 0 || position > this.length) return null;
+    if (position < 0 || position >= this.length) return null;
 
+    let current = this.head;
     if (position === 0) {
       if (this.length === 1) {
         this.head = null;
@@ -90,11 +91,16 @@ class DoublyLinkedList<T> extends LinkedList<T> {
     }
     // position从0开始计数，所以最后一个节点应该是length -1
     else if (position === this.length - 1) {
+      current = this.tail;
       this.tail = this.tail!.prev;
       this.tail!.next = null;
     } else {
+      current = this.getNode(position) as DoublyNode<T>;
+      current.next!.prev = current.prev;
+      current.prev!.next = current.next;
     }
-    return null;
+    this.length--;
+    return current?.value ?? null;
   }
 }
 
@@ -115,9 +121,17 @@ doublyLinkedList.prepend('cba');
 doublyLinkedList.traverse();
 doublyLinkedList.postTraverse();
 
+console.log('---------- insert --------');
 doublyLinkedList.insert('why', 0);
 doublyLinkedList.insert('kobe', 7);
 doublyLinkedList.insert('james', 3);
+doublyLinkedList.traverse();
+doublyLinkedList.postTraverse();
+
+console.log('---------- removeAt --------');
+doublyLinkedList.removeAt(0);
+doublyLinkedList.removeAt(7);
+doublyLinkedList.removeAt(3);
 doublyLinkedList.traverse();
 doublyLinkedList.postTraverse();
 
