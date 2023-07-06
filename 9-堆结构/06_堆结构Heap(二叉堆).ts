@@ -1,3 +1,4 @@
+import { cbtPrint } from 'hy-algokit';
 class Heap<T> {
   // 属性
   data: T[] = [];
@@ -164,5 +165,6 @@ const arr = [19, 100, 36, 17, 3, 25];
 
 const heap = new Heap<number>(arr, false);
 console.log(arr);
+cbtPrint(arr);
 
 export {};
