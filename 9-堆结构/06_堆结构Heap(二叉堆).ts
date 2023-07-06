@@ -2,6 +2,13 @@ class Heap<T> {
   // 属性
   data: T[] = [];
   private length: number = 0;
+  private isMax: boolean = true;
+
+  constructor(arr: T[] = [], isMax = true) {
+    this.isMax = isMax;
+    if (arr.length === 0) return;
+    this.buildHeap(arr);
+  }
 
   // 私有工具方法
   // 交换两个节点的位置
@@ -9,6 +16,14 @@ class Heap<T> {
     const temp = this.data[i];
     this.data[i] = this.data[j];
     this.data[j] = temp;
+  }
+
+  private compare(i: number, j: number) {
+    if (this.isMax) {
+      return this.data[i] >= this.data[j];
+    } else {
+      return this.data[i] <= this.data[j];
+    }
   }
 
   // 方法
@@ -39,7 +54,7 @@ class Heap<T> {
 
     while (index > 0) {
       let parentIndex = Math.floor((index - 1) / 2);
-      if (this.data[index] <= this.data[parentIndex]) {
+      if (this.compare(parentIndex, index)) {
         break;
       }
       this.swap(index, parentIndex);
@@ -62,16 +77,18 @@ class Heap<T> {
     this.data[0] = this.data.pop()!;
     this.length--;
 
-    this.heapify_down();
+    this.heapify_down(0);
 
     return topValue;
   }
 
-  private heapify_down() {
+  private heapify_down(start: number) {
     // 3. 维护最大堆进行下滤操作
     // 3.1 定义我们的索引位置
-    let index = 0;
+    let index = start;
 
+    // 当左节点大于等于长度的时候，说明左节点不存在
+    // 等价于 左节点 <= this.length - 1
     while (2 * index + 1 < this.length) {
       // 3.2 找到我们的左右子节点
       let leftChildIndex = 2 * index + 1;
@@ -82,13 +99,13 @@ class Heap<T> {
       // 3.3 找到左右子节点较大的值
       if (
         rightChildIndex < this.length &&
-        this.data[rightChildIndex] > this.data[leftChildIndex]
+        this.compare(rightChildIndex, leftChildIndex)
       ) {
         largerIndex = rightChildIndex;
       }
 
       // 3.4 较大的值和index位置比较
-      if (this.data[index] >= this.data[largerIndex]) {
+      if (this.compare(index, largerIndex)) {
         break;
       }
 
@@ -110,20 +127,42 @@ class Heap<T> {
     return this.length === 0;
   }
 
-  buildHeap(arr: T[]) {}
+  // 原地建堆的方式，我们也称之为自下而上的下滤。虽然也可以使用自上而下的上滤，但是效率会低一点。
+  buildHeap(arr: T[]) {
+    this.data = arr;
+    this.length = arr.length;
+
+    // 2. 从最后一个非叶子节点，开始下滤操作
+    // 怎么找到最后一个非叶子结点，找到最后一个叶子结点length-1，他的父节点就是最后一个非叶子结点
+    const start = Math.floor((this.length - 1) / 2);
+    for (let i = start; i >= 0; i--) {
+      this.heapify_down(i);
+    }
+  }
 }
 
-const arr = [19, 100, 26, 17, 3, 25, 1, 2, 7];
-const heap = new Heap();
-for (const item of arr) {
-  heap.insert(item);
-}
+const arr = [19, 100, 36, 17, 3, 25];
 
-console.log(heap.data);
-while (!heap.isEmpty()) {
-  console.log(heap.extract());
-}
+// const heap = new Heap<number>();
 
-// 下滤操作时间复杂度为O(log n)
+// for (const item of arr) {
+//   heap.insert(item);
+// }
+// console.log(heap.data);
+
+// while (!heap.isEmpty()) {
+//   console.log(heap.extract());
+// }
+
+// const heap = new Heap<number>(arr);
+// 等价于
+// const heap = new Heap<number>();
+// heap.buildHeap(arr);
+
+// 执行完成后，原数组会发生改变
+// console.log(arr);
+
+const heap = new Heap<number>(arr, false);
+console.log(arr);
 
 export {};

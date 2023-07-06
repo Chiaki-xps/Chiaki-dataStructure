@@ -30,6 +30,11 @@ class Heap<T> {
     this.length++;
 
     // 2. 维护最大堆的特性（最后位置的元素需要执行上滤操作）
+    this.heapify_up();
+  }
+
+  // 上滤
+  heapify_up() {
     let index = this.length - 1;
 
     while (index > 0) {
@@ -42,6 +47,7 @@ class Heap<T> {
     }
   }
 
+  // 提取最大
   extract(): T | undefined {
     return undefined;
   }
@@ -72,5 +78,10 @@ heap.insert(133);
 console.log(heap.data);
 heap.insert(65);
 console.log(heap.data);
+
+console.log(heap.extract());
+console.log(heap.extract());
+console.log(heap.extract());
+console.log(heap.extract());
 
 export {};
