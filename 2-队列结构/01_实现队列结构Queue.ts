@@ -2,7 +2,7 @@ import IQueue from './IQueue';
 
 class ArrayQueue<T> implements IQueue<T> {
   // 内部是通过数组(链表)保存
-  private data: T[] = [];
+  protected data: T[] = [];
 
   enqueue(element: T): void {
     this.data.push(element);

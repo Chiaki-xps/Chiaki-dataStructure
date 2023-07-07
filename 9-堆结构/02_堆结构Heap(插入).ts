@@ -53,7 +53,7 @@ class Heap<T> {
   }
 
   peek(): T | undefined {
-    return undefined;
+    return this.data[0];
   }
 
   size() {

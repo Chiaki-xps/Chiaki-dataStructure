@@ -1,5 +1,5 @@
 import { cbtPrint } from 'hy-algokit';
-class Heap<T> {
+export default class Heap<T> {
   // 属性
   data: T[] = [];
   private length: number = 0;
@@ -117,7 +117,7 @@ class Heap<T> {
   }
 
   peek(): T | undefined {
-    return undefined;
+    return this.data[0];
   }
 
   size() {
@@ -163,8 +163,6 @@ const arr = [19, 100, 36, 17, 3, 25];
 // 执行完成后，原数组会发生改变
 // console.log(arr);
 
-const heap = new Heap<number>(arr, false);
-console.log(arr);
-cbtPrint(arr);
+// s
 
 export {};
