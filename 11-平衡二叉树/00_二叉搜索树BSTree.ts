@@ -17,7 +17,7 @@ export class TreeNode<T> extends Node<T> {
 }
 
 // BinarySearchTree
-class BSTree<T> {
+export class BSTree<T> {
   private root: TreeNode<T> | null = null;
 
   print() {
