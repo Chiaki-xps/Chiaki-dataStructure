@@ -1,7 +1,17 @@
-import { BSTree } from './00_二叉搜索树BSTree';
+import { BSTree, TreeNode } from './00_二叉搜索树BSTree';
 import { AVLTreeNode } from './04_封装AVLTreeNode(左旋转操作) copy';
 
 class AVLTree<T> extends BSTree<T> {
+  // 重写调用的createNode方法
+  // 因为我们AVL树继承的是BSTree，BSTree创建的node节点是自己的TreeNode
+  // 而我们需要的是AVLTreeNode，所以重写方法
+
+  // 这里可以使用TreeNode，因为父类引用指向子类对象，多态
+  // AVLTreeNode创建的累符合TreeNode
+  protected createNode(value: T): TreeNode<T> {
+    return new AVLTreeNode(value);
+  }
+
   // 如何去找到不平衡的节点(先不做)
   // 假设已经找了，那没我我们如何让这个节点变平衡
 
@@ -67,10 +77,8 @@ class AVLTree<T> extends BSTree<T> {
 
 const avlTree = new AVLTree<number>();
 
-avlTree.insert(10);
-avlTree.insert(15);
-avlTree.insert(20);
-// avlTree.insert(5);
-// avlTree.insert(8);
+avlTree.insert(50);
+avlTree.insert(100);
+avlTree.insert(150);
 
 avlTree.print();

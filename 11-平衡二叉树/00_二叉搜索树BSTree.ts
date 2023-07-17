@@ -18,7 +18,7 @@ export class TreeNode<T> extends Node<T> {
 
 // BinarySearchTree
 export class BSTree<T> {
-  private root: TreeNode<T> | null = null;
+  protected root: TreeNode<T> | null = null;
 
   print() {
     btPrint(this.root);
@@ -49,10 +49,15 @@ export class BSTree<T> {
     return null;
   }
 
+  // 模板模式
+  protected createNode(value: T): TreeNode<T> {
+    return new TreeNode(value);
+  }
+
   /** 插入数据的操作 */
   insert(value: T) {
     // 1. 根据传入value创建Node(TreeNode)节点
-    const newNode = new TreeNode(value);
+    const newNode = this.createNode(value);
 
     // 2. 判断当前是否已经有了根节点
     if (!this.root) {
@@ -70,6 +75,8 @@ export class BSTree<T> {
       if (node.left === null) {
         // node 节点的左边已经是空白
         node.left = newNode;
+        // 给新插入的node节点，也设置父节点
+        newNode.parent = node;
       } else {
         // 去右边继续查找空白位置
         this.insertNode(node.left, newNode);
@@ -77,6 +84,8 @@ export class BSTree<T> {
     } else {
       if (node.right === null) {
         node.right = newNode;
+        // 新增节点都能保证有父节点指向
+        newNode.parent = node;
       } else {
         this.insertNode(node.right, newNode);
       }

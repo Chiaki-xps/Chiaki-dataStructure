@@ -1,7 +1,7 @@
 import { btPrint } from 'hy-algokit';
 import { TreeNode } from './00_二叉搜索树BSTree';
 
-class AVLTreeNode<T> extends TreeNode<T> {
+export class AVLTreeNode<T> extends TreeNode<T> {
   // 保证获取到的left/right节点的类型是AVLTreeNode,这样子才能拿到AVLTreeNode一些特别的属性
   left: AVLTreeNode<T> | null = null;
   right: AVLTreeNode<T> | null = null;
@@ -40,7 +40,7 @@ class AVLTreeNode<T> extends TreeNode<T> {
     if (leftHeight < rightHeight) return this.right;
 
     // 剩下的情况是左右相等，一般情况是不可能来到这里，在这里的代码逻辑中，当判断该节点不平衡的时候，才会执行获取更高的节点，所有左右是不相等的。
-    // 下面的代码不必深究，正常不会来到这里
+    // 假如我们传入的节点是任意的,那么如果左右平衡，就返回左节点
     return this.isLeft ? this.left : this.right;
   }
 
