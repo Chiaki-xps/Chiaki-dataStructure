@@ -10,7 +10,7 @@ function insertionSort(arr: number[]): number[] {
     // 插入的数据的位置，前面的数据已经排序好了
     let j = i - 1;
     // 与前面的数据进行比较，0 ~ i-1已经是排序好的数组，在其中找到比newNum小的数字
-    while (j >= 0 && arr[j] > newNum) {
+    while (arr[j] > newNum && j >= 0) {
       arr[j + 1] = arr[j];
       j--;
     }
