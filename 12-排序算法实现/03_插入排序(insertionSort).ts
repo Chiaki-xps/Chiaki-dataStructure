@@ -3,6 +3,7 @@ import { testSort } from 'hy-algokit';
 function insertionSort(arr: number[]): number[] {
   let n = arr.length;
 
+  // 1. 默认第0个为排序好的，从第1个开始插入
   for (let i = 1; i < n; i++) {
     // 当前插入的数据
     const newNum = arr[i];
