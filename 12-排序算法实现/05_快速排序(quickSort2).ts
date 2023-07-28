@@ -8,6 +8,15 @@ function quickSort(arr: number[]): number[] {
     if (left >= right) return;
 
     // 1. 找到基准元素(pivot)
+    // 利用三位数取中法，避免O(n)级别的递归
+    const mid = left + Math.floor((left + right) / 2);
+    // 取到三个数，顺便也进行了排序。然后默认中间值最后
+    if (arr[left] > arr[right]) swap(arr, left, right);
+    if (arr[mid] > arr[right]) swap(arr, mid, right);
+    if (arr[left] > arr[mid]) swap(arr, left, mid);
+    // 最后把中间数放到最后，作为基准，取中间数更友好
+    swap(arr, mid, right);
+
     // 这里我们用数组最后一个作为轴心
     const pivot = arr[right];
 
