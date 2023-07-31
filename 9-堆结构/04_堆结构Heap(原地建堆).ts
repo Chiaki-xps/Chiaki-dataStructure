@@ -123,7 +123,7 @@ class Heap<T> {
 
     // 2. 从最后一个非叶子节点，开始下滤操作
     // 怎么找到最后一个非叶子结点，找到最后一个叶子结点length-1，他的父节点就是最后一个非叶子结点
-    const start = Math.floor((this.length - 1) / 2);
+    const start = Math.floor(this.length / 2 - 1);
     for (let i = start; i >= 0; i--) {
       this.heapify_down(i);
     }

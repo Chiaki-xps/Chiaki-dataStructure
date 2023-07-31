@@ -1,7 +1,7 @@
 import { testSort, swap, measureSort } from 'hy-algokit';
 // import { testSort, swap } from './utils';
 
-function bubbleSort(arr: number[]): number[] {
+export default function bubbleSort(arr: number[]): number[] {
   const n = arr.length;
 
   // 当j<length可以取到数组最后一个，但是我们冒泡排序中不需要拿最后一个比较，

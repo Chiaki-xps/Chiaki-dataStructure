@@ -1,6 +1,6 @@
 import { measureSort, swap, testSort } from 'hy-algokit';
 
-function quickSort(arr: number[]): number[] {
+export default function quickSort(arr: number[]): number[] {
   partition(0, arr.length - 1);
   // 定义递归函数(闭包)
   function partition(left: number, right: number): void {

@@ -1,6 +1,6 @@
 import { measureSort, testSort } from 'hy-algokit';
 
-function mergeSort(arr: number[]): number[] {
+export default function mergeSort(arr: number[]): number[] {
   // 递归结束条件
   if (arr.length <= 1) return arr;
 

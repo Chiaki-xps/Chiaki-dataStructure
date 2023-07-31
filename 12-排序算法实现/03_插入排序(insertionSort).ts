@@ -1,6 +1,6 @@
 import { testSort } from 'hy-algokit';
 
-function insertionSort(arr: number[]): number[] {
+export default function insertionSort(arr: number[]): number[] {
   let n = arr.length;
 
   // 1. 默认第0个为排序好的，从第1个开始插入

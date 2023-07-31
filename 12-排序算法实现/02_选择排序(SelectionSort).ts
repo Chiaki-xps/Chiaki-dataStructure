@@ -1,6 +1,6 @@
 import { measureSort, swap, testSort, compareSort } from 'hy-algokit';
 
-function SelectionSort(arr: number[]): number[] {
+export default function selectionSort(arr: number[]): number[] {
   let n = arr.length;
 
   // 外层循环作用: 经过多少轮找最小值
@@ -22,6 +22,6 @@ function SelectionSort(arr: number[]): number[] {
   return arr;
 }
 
-// testSort(SelectionSort);
-measureSort(SelectionSort);
-// compareSort([SelectionSort]);
+// testSort(selectionSort);
+measureSort(selectionSort);
+// compareSort([selectionSort]);
