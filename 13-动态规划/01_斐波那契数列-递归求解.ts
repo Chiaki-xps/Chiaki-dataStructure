@@ -3,6 +3,8 @@ function fib(n: number): number {
   return fib(n - 1) + fib(n - 2);
 }
 
-console.log(fib(10));
+console.log(fib(10)); // 55
+console.log(fib(20)); // 6765
+console.log(fib(50)); // 12586269025
 
 export {};
