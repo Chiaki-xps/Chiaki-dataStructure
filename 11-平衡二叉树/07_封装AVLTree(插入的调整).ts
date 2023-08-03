@@ -1,5 +1,5 @@
 import { BSTree, TreeNode } from './00_二叉搜索树BSTree';
-import { AVLTreeNode } from './04_封装AVLTreeNode(左旋转操作) copy';
+import { AVLTreeNode } from './04_封装AVLTreeNode(左旋转操作)';
 
 class AVLTree<T> extends BSTree<T> {
   // 重写调用的createNode方法
@@ -13,7 +13,16 @@ class AVLTree<T> extends BSTree<T> {
   }
 
   // 如何去找到不平衡的节点(先不做)
-  // 假设已经找了，那没我我们如何让这个节点变平衡
+  checkBalance(node: AVLTreeNode<T>): void {
+    let current = node.parent;
+    while (current) {
+      if (current.isBalanced) {
+        this.reBalance(current);
+        break;
+      }
+      current = current.parent;
+    }
+  }
 
   /**
    * 根据不平衡的节点的情况（LL/RR/LR/RL）让子树平衡

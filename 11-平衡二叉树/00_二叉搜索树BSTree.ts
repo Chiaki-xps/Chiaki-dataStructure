@@ -5,6 +5,7 @@ import Node from '../types/Nodes';
 export class TreeNode<T> extends Node<T> {
   left: TreeNode<T> | null = null;
   right: TreeNode<T> | null = null;
+  // 对于AVL树来说，需要节点保存父节点的信息，方便进行父节点判断是否平衡
   parent: TreeNode<T> | null = null;
 
   get isLeft(): boolean {
@@ -54,6 +55,8 @@ export class BSTree<T> {
     return new TreeNode(value);
   }
 
+  protected checkBalance(node: TreeNode<T>) {}
+
   /** 插入数据的操作 */
   insert(value: T) {
     // 1. 根据传入value创建Node(TreeNode)节点
@@ -67,6 +70,9 @@ export class BSTree<T> {
       // 树中已经有其他值
       this.insertNode(this.root, newNode);
     }
+
+    // 3. 检查树是否平衡
+    this.checkBalance(newNode);
   }
 
   private insertNode(node: TreeNode<T>, newNode: TreeNode<T>) {
