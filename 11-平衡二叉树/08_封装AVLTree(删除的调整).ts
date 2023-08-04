@@ -127,12 +127,6 @@ const avlTree = new AVLTree<number>();
 // avlTree.remove(16);
 // avlTree.remove(20);
 
-// 测试3
-avlTree.insert(9);
-avlTree.insert(11);
-avlTree.insert(8);
-avlTree.insert(10);
-
 avlTree.print();
 
 export {};
