@@ -1,5 +1,5 @@
 import { BSTree } from './00_二叉搜索树BSTree';
-import { AVLTreeNode } from './04_封装AVLTreeNode(左旋转操作) copy';
+import { AVLTreeNode } from './04_封装AVLTreeNode(左旋转操作)';
 
 class AVLTree<T> extends BSTree<T> {
   // 如何去找到不平衡的节点(先不做)
