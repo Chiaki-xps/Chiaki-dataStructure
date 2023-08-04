@@ -58,4 +58,6 @@ avlNode1.right.right = new AVLTreeNode(20);
 // console.log(avlNode1.isBalanced);
 // console.log(avlNode1.right.isBalanced);
 
-console.log(avlNode1.heightChild);
+// console.log(avlNode1.heightChild);
+
+export {};

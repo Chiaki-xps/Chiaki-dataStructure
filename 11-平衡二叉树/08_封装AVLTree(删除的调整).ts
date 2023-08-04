@@ -1,9 +1,34 @@
-import { BSTree } from './00_二叉搜索树BSTree';
+import { BSTree, TreeNode } from './00_二叉搜索树BSTree';
 import { AVLTreeNode } from './04_封装AVLTreeNode(左旋转操作)';
 
 class AVLTree<T> extends BSTree<T> {
+  // 重写调用的createNode方法
+  // 因为我们AVL树继承的是BSTree，BSTree创建的node节点是自己的TreeNode
+  // 而我们需要的是AVLTreeNode，所以重写方法
+
+  // 这里可以使用TreeNode，因为父类引用指向子类对象，多态
+  // AVLTreeNode创建的累符合TreeNode
+  protected createNode(value: T): TreeNode<T> {
+    return new AVLTreeNode(value);
+  }
+
   // 如何去找到不平衡的节点(先不做)
-  // 假设已经找了，那没我我们如何让这个节点变平衡
+  checkBalance(node: AVLTreeNode<T>, isAdd = true): void {
+    let current = node.parent;
+    while (current) {
+      if (!current.isBalanced) {
+        this.reBalance(current);
+        // break决定不会进一步去查找父节点有没有平衡的情况了
+        // 添加的情况是不需要进一步向上查找的,直接break
+        //   - 插入的时候，出现不平衡的节点（前提出现不平衡的时候），
+        //   - 那么不平衡的节点就会进行平衡，不平衡的原因是左右的高度失衡导致的，进行平衡以后，我们原来不平衡的节点为root的子树平衡后的高度一定和插入的时候一样。
+        //   - 那么对于不平衡节点平衡后，高度与原先没有发生变化，那么往上的父节点们一定也不会出现不平衡
+        // 删除的情况是需要进一步向上查找的，不能break
+        if (isAdd) break;
+      }
+      current = current.parent;
+    }
+  }
 
   /**
    * 根据不平衡的节点的情况（LL/RR/LR/RL）让子树平衡
@@ -67,12 +92,46 @@ class AVLTree<T> extends BSTree<T> {
 
 const avlTree = new AVLTree<number>();
 
-avlTree.insert(10);
-avlTree.insert(15);
-avlTree.insert(20);
-// avlTree.insert(5);
-// avlTree.insert(8);
+// avlTree.insert(50);
+// avlTree.insert(100);
+// avlTree.insert(150);
 
-// avlTree.print();
+// 测试1
+// const delNums: number[] = [];
+// for (let i = 0; i < 20; i++) {
+//   const randomNUm = Math.floor(Math.random() * 200);
+//   if (i % 2 === 0 && delNums.length < 8) {
+//     delNums.push(randomNUm);
+//   }
+//   avlTree.insert(randomNUm);
+// }
+
+// for (const delNum of delNums) {
+//   avlTree.remove(delNum);
+// }
+
+// 测试2
+// avlTree.insert(15);
+// avlTree.insert(13);
+// avlTree.insert(20);
+// avlTree.insert(16);
+// avlTree.insert(10);
+// avlTree.insert(14);
+// avlTree.insert(9);
+// avlTree.insert(11);
+
+// avlTree.remove(13);
+// avlTree.remove(15);
+// avlTree.remove(10);
+// avlTree.remove(16);
+// avlTree.remove(20);
+
+// 测试3
+avlTree.insert(9);
+avlTree.insert(11);
+avlTree.insert(8);
+avlTree.insert(10);
+
+avlTree.print();
 
 export {};

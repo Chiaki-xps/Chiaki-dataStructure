@@ -10,4 +10,4 @@ avlTree.insert(20);
 // avlTree.insert(5);
 // avlTree.insert(8);
 
-avlTree.print();
+// avlTree.print();

@@ -56,7 +56,7 @@ export class BSTree<T> {
   }
 
   // 这里啥也没做是因为BSTree不考虑平衡，假如继承的AVLTree就需要考虑平衡问题，需要重写方法
-  protected checkBalance(node: TreeNode<T>, isAdd = true) {}
+  protected checkBalance(node: TreeNode<T>) {}
 
   /** 插入数据的操作 */
   insert(value: T) {
@@ -231,28 +231,14 @@ export class BSTree<T> {
     if (successor !== delNode.right) {
       // 有后继节点的右节点就移到后继节点的父节点左节点上，没有就为null
       successor!.parent!.left = successor?.right ?? null;
-
-      // n2: 不再删除current,而是修改current.value的时候，后继节点不移动，不需要重新对right赋值
-      // successor!.right = delNode.right;
-      // 改为删除后继节点
-      if (successor?.right) {
-        successor.right.parent = successor.parent;
-      }
-    }
-    // n3: 刚好右子节点的情况,删除后继节点，把后继节点的right移动到删除节点的right上，修改父节点指向
-    else {
-      delNode.right = successor!.right;
-      if (successor!.right) {
-        successor!.right.parent = delNode;
-      }
+      successor!.right = delNode.right;
     }
 
     // successor === delNode.right的时候我们不需要做什么。即使我们有右结点，因为删除的节点是后继节点的父节点，后继节点变成父节点。
 
     // 一定要进行的操作：将删除节点的left，赋值给后继节点的left
     // 将删除节点的左节点，放到后继节点的左边
-    // n4: 目标变成删除后继节点，就没必要进行后继节点的赋值操作了
-    // successor!.left = delNode.left;
+    successor!.left = delNode.left;
     return successor!;
   }
 
@@ -277,7 +263,7 @@ export class BSTree<T> {
       replaceNode = current.left;
     }
 
-    // 4. 只有一个子节点：只有右子节点
+    // 4. 只有一个子节点：只有右 子节点
     else if (current.left === null) {
       // 相当于保存current的右子树
       replaceNode = current.right;
@@ -291,26 +277,7 @@ export class BSTree<T> {
       // 这里我们方式二,拿到后继节点
       // 这里相当于current节点传入后，将current的左右子树合并成一个新的子树然后给到replaceNode
       const successor = this.getSuccessor(current);
-
-      // 这里删除节点使用新方法，注释n开头，表示新方法的注释
-      // n1: 这一步的思路：
-      // 以为把找到的后继节点上移，然后还要替换其父节点的指向，以及子节点的指向，还有其子节点的指向新的父节点，
-      // 为了避开这些麻烦，我们直接把后继节点的值复制给current.value
-      // 然后去删除后继节点，因为后继节点最多只有一个右子树，只需要处理一个节点
-      current.value = successor.value;
-
-      // replaceNode = successor;
-      // n5: 删除的节点，变成了删除后继节点
-      delNode = successor;
-
-      // n6: 有两个子节点的时候，我们做的操作不是删除current的,而是删除子节点
-      // 这里已经完成了删除，所以不需要下面的执行，可以直接进入判断平衡
-      // 然后直接结束
-      // n7: 这样做的好处，如果你直接删除了current，可以减少一些节点的操作
-      // n8: 这里无论用什么办法，应该传入的是后继节点，因为事实上这个位置的current节点被删除还是不删除只重新赋值,这个位置的节点（或者说这个索引位置）仍然是存在节点的，只是换了一个节点，
-      // 真正被删除的是后继节点（后继节点发生移动，那个位置上的索引其实变成了空），那么就会导致后继节点的父节点存在失衡，恰好，current也一定是后继节点通过不断.parent最终也会找到current
-      this.checkBalance(delNode, false);
-      return true;
+      replaceNode = successor;
     }
 
     // 这里是真正执行删除的地方
@@ -334,9 +301,7 @@ export class BSTree<T> {
 
     // 删除完成后,检测树是否平衡
     // 传入被删除的节点.我们自定义的checkBalance函数会帮助我们进行从传入的父节点开始检查平衡
-
-    // n7: 这里传入的delNode为current,current的子树本身也是二叉搜索树，所以只需要考虑删除一个节点后，current父节点是否会失衡
-    this.checkBalance(delNode, false);
+    this.checkBalance(delNode);
     return true;
   }
 }

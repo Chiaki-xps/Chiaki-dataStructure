@@ -16,7 +16,7 @@ class AVLTree<T> extends BSTree<T> {
   checkBalance(node: AVLTreeNode<T>): void {
     let current = node.parent;
     while (current) {
-      if (current.isBalanced) {
+      if (!current.isBalanced) {
         this.reBalance(current);
         break;
       }
@@ -86,8 +86,25 @@ class AVLTree<T> extends BSTree<T> {
 
 const avlTree = new AVLTree<number>();
 
-avlTree.insert(50);
-avlTree.insert(100);
-avlTree.insert(150);
+// avlTree.insert(50);
+// avlTree.insert(100);
+// avlTree.insert(150);
+
+// for (let i = 0; i < 20; i++) {
+//   avlTree.insert(Math.floor(Math.random() * 200));
+// }
+
+avlTree.insert(15);
+avlTree.insert(13);
+avlTree.insert(20);
+avlTree.insert(16);
+avlTree.insert(10);
+avlTree.insert(14);
+avlTree.insert(9);
+avlTree.insert(11);
+
+avlTree.remove(13);
 
 avlTree.print();
+
+export {};

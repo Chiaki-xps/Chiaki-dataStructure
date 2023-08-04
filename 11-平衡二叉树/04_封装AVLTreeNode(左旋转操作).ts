@@ -133,8 +133,10 @@ parent.right = avlNode1;
 
 avlNode1.parent = parent;
 
-btPrint(parent);
+// btPrint(parent);
 
 avlNode1.leftRotation();
 
-btPrint(parent);
+// btPrint(parent);
+
+export {};
